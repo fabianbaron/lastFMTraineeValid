@@ -7,13 +7,13 @@ public class Model {
 
     @SerializedName("topartists")
     @Expose
-    private Topartists topartists;
+    private TopArtistsList topartists;
 
-    public Topartists getTopartists() {
+    public TopArtistsList getTopArtists() {
         return topartists;
     }
 
-    public void setTopartists(Topartists topartists) {
+    public void setTopartists(TopArtistsList topartists) {
         this.topartists = topartists;
     }
 

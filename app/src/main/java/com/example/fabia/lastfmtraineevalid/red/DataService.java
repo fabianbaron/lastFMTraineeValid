@@ -7,10 +7,17 @@ import com.example.fabia.lastfmtraineevalid.model.TopArtistsList;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
+import retrofit2.http.Query;
 
 public interface DataService {
 
-    @GET("?method=geo.gettopartists&format=json&api_key=829751643419a7128b7ada50de590067&country=spain")
-    Call<Model> getTopartists();
+    @GET("?")
+    Call<Model> getTopArtistsQuery(
+            @Query("method") String method,
+            @Query("format") String format,
+            @Query("api_key") String apiKey,
+            @Query("country") String country,
+            @Query("page") String page
+    );
 
 }

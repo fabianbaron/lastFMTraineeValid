@@ -6,11 +6,13 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.fabia.lastfmtraineevalid.R;
 import com.example.fabia.lastfmtraineevalid.model.Artist;
 import com.example.fabia.lastfmtraineevalid.model.Model;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -19,10 +21,7 @@ import butterknife.ButterKnife;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
 
-
     Model modelo;
-
-
 
     public class ViewHolder extends RecyclerView.ViewHolder{
 
@@ -34,6 +33,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         TextView mbidTextView;
         @BindView(R.id.row_streamable)
         TextView streamableTextView;
+        @BindView(R.id.row_coverImage)
+        ImageView coverImage;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -62,10 +63,17 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
         List<Artist> myLista = modelo.getTopArtists().getArtist();
 
-        holder.nombreTextView.setText(myLista.get(position).getName());
-        holder.oyentesTextView.setText(myLista.get(position).getListeners());
-        holder.mbidTextView.setText(myLista.get(position).getMbid());
-        holder.streamableTextView.setText(myLista.get(position).getStreamable());
+        holder.nombreTextView.setText("Nombre: " + myLista.get(position).getName());
+        holder.oyentesTextView.setText("Oyentes: " + myLista.get(position).getListeners());
+        holder.mbidTextView.setText("MBID: " +myLista.get(position).getMbid());
+        holder.streamableTextView.setText("Streamable: " + myLista.get(position).getStreamable());
+
+        Context contexto = holder.coverImage.getContext();
+        Picasso
+                .with(contexto)
+                .load(myLista.get(position).getImage().get(3).getText())
+                .into(holder.coverImage);
+
     }
 
     @Override

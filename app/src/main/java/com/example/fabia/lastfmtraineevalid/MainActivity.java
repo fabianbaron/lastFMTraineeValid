@@ -3,15 +3,17 @@ package com.example.fabia.lastfmtraineevalid;
 import android.app.ProgressDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.fabia.lastfmtraineevalid.adapter.RecyclerViewAdapter;
 import com.example.fabia.lastfmtraineevalid.model.Model;
 import com.example.fabia.lastfmtraineevalid.red.DataService;
 import com.example.fabia.lastfmtraineevalid.red.RetrofitInstance;
+import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -32,17 +34,32 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        //Butter Knife
         ButterKnife.bind(this);
 
+        //Progress Dialog mientras carga datos
         mProgressDialog = new ProgressDialog(MainActivity.this);
         mProgressDialog.setMessage("Cargando...");
         mProgressDialog.show();
 
+        //Recycler View para presentar datos
+        myRecyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
+        myRecyclerView.setHasFixedSize(true);
+        RecyclerView.ItemDecoration itemDecoration = new DividerItemDecoration(this,
+                DividerItemDecoration.VERTICAL);
+        myRecyclerView.addItemDecoration(itemDecoration);
+
+        //Retrofit
         DataService clienteRetrofit = RetrofitInstance.getRetrofitInstance()
                 .create(DataService.class);
-        Call<Model> modelCall = clienteRetrofit.getTopartists();
-
+        Call<Model> modelCall = clienteRetrofit.getTopArtistsQuery(RetrofitInstance.METHOD,
+                RetrofitInstance.FORMAT,
+                RetrofitInstance.API_KEY,
+                "colombia",
+                "1");
         modelCall.enqueue(modelCallback);
+
+        //Picasso
     }
 
     private Callback<Model> modelCallback = new Callback<Model>() {
@@ -52,7 +69,6 @@ public class MainActivity extends AppCompatActivity {
 
             RecyclerViewAdapter myAdapter = new RecyclerViewAdapter(modelo);
             myRecyclerView.setAdapter(myAdapter);
-            myRecyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
 
             Toast.makeText(MainActivity.this,
                     modelo.getTopArtists().getArtist().get(0).getName(),
